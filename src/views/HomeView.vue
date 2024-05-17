@@ -1,5 +1,10 @@
 <script lang="ts" setup>
+import MainLayout from "@/layout/MainLayout.vue"
+import SearchForm from "@/components/SearchForm.vue"
+
 </script>
 <template>
-    <div class="text-3xl font-bold bg-red-400 underline">Alegra</div>
+    <MainLayout>
+        <SearchForm />
+    </MainLayout>
 </template>
