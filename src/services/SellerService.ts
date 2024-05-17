@@ -9,7 +9,7 @@ class SellerService {
   constructor() {
     this.user = import.meta.env.APP_ALEGRA_USER
     this.password = import.meta.env.APP_ALEGRA_TOKEN
-    this.url = import.meta.env.APP_ALEGRA_URL
+    this.url = import.meta.env.APP_ALEGRA_URL_SELLERS
   }
 
   private getAuthHeader(): string {
