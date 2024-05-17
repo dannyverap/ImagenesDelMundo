@@ -9,6 +9,14 @@ export const useSellerStore = defineStore('seller', {
       sellerDetail: {} as ISeller | undefined
     }
   },
+  getters: {
+    numberOfSeller(): number {
+      if (!this.sellers) {
+        return 0
+      }
+      return this.sellers.length
+    }
+  },
   actions: {
     async getSellers(): Promise<boolean> {
       try {
