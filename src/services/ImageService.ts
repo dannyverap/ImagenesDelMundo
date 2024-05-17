@@ -1,4 +1,5 @@
 import axios, { type AxiosRequestConfig } from 'axios'
+import type { ImageItem, ImageSearchResponse } from '@/interfaces/IImage'
 
 class ImageSearchService {
   private baseUrl: string
@@ -15,7 +16,7 @@ class ImageSearchService {
     return `${this.baseUrl}?cx=${this.searchEngineId}&key=${this.apiKey}&num=${resultsNumber}&q=${query}&searchType=image`
   }
 
-  public async searchImages(query: string, resultsNumber: number = 5): Promise<any> {
+  public async searchImages(query: string, resultsNumber: number = 5): Promise<ImageItem[]> {
     const url = this.generateImageSearchUrl(query, resultsNumber)
     const options: AxiosRequestConfig = {
       method: 'GET',
@@ -25,8 +26,8 @@ class ImageSearchService {
       }
     }
     try {
-      const response = await axios.request<any>(options)
-      return response.data
+      const response = await axios.request<ImageSearchResponse>(options)
+      return response.data.items
     } catch (error) {
       if (axios.isAxiosError(error)) {
         throw new Error(
