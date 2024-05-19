@@ -1,5 +1,5 @@
 interface ISeller {
-  id?: string
+  id?: number
   name: string
   identification?: string
   observations?: string
