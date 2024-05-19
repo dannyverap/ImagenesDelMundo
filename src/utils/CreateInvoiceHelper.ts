@@ -17,11 +17,13 @@ class InvoiceCreator {
   createDefaultInvoice(sellerId: number, points: number): IInvoice {
     const items = [this.createInvoiceItem(points)]
     return {
+      status: 'open',
+      payments: [{ date: this.formatDate(new Date()) }],
       items,
       dueDate: this.formatDate(new Date()),
       date: this.formatDate(new Date()),
       client: 3,
-      seller: sellerId
+      seller: { id: sellerId }
     }
   }
 }
