@@ -3,11 +3,11 @@ import { SellerServiceInstance } from '@/services/SellerService'
 import type { ISeller } from '@/interfaces/ISeller'
 import { ref, computed } from 'vue'
 
-export const useSellerStore = defineStore('sellers', () => {
+export const useSellersStore = defineStore('sellers', () => {
   const sellers = ref([] as ISeller[] | undefined)
   const sellerDetail = ref({} as ISeller | undefined)
 
-  const numberOfSeller = computed(() => {
+  const numberOfSellers = computed(() => {
     if (!sellers.value) {
       return 0
     }
@@ -68,7 +68,7 @@ export const useSellerStore = defineStore('sellers', () => {
   return {
     sellers,
     sellerDetail,
-    numberOfSeller,
+    numberOfSellers,
     getSellers,
     getSeller,
     createSeller,

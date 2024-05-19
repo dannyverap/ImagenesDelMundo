@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { usePointsStore } from '@/stores/Points';
-import { useSellerStore } from '@/stores/Seller';
+import { useSellersStore } from '@/stores/Sellers';
 import { computed, onMounted } from 'vue';
 
 const pointsStore = usePointsStore()
-const sellerStore = useSellerStore()
+const sellerStore = useSellersStore()
 
 onMounted(() => {
     sellerStore.getSellers()
