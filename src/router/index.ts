@@ -1,10 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import ImagesView from '../views/ImagesView.vue'
-import SearchView from '@/views/SearchView.vue'
 import BillingView from '@/views/BillingView.vue'
 import RankingView from '@/views/RankingView.vue'
-import SellersView from '@/views/SellersView.vue'
+import RewardSummaryView from '@/views/RewardSummaryView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -45,9 +44,9 @@ const router = createRouter({
       }
     },
     {
-      path: '/sellers',
-      name: 'sellers',
-      component: SellersView,
+      path: '/rewardSummary',
+      name: 'rewardSummary',
+      component: RewardSummaryView,
       meta: {
         requireAuth: false
       }
