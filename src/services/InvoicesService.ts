@@ -28,8 +28,6 @@ class InvoiceService {
     }
     try {
       const response = await axios.request<T>(options)
-      console.log(response);
-      
       return response.data
     } catch (error) {
       if (axios.isAxiosError(error)) {
