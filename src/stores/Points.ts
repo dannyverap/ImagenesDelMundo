@@ -6,12 +6,12 @@ import { ref } from 'vue'
 export const usePointsStore = defineStore('points', () => {
   const points = ref<IPoint[]>([])
   const winner_id = ref<number | null>(null)
-
+  const totalPoints = ref<number>(0)
 
   const initPointsListener = () => {
     PointsServiceInstance.onPointsSnapshot((pointsData) => {
       points.value = pointsData
-
+      totalPoints.value = pointsData.reduce((acc, point) => acc + point.points, 0)
       const winner = pointsData.find(
         (point) => point.points > PointsServiceInstance.POINTS_THRESHOLD
       )
@@ -76,6 +76,7 @@ export const usePointsStore = defineStore('points', () => {
   return {
     points,
     winner_id,
+    totalPoints,
     addSellerPoint,
     setSellerWinner,
     resetCompetition,
