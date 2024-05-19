@@ -1,3 +1,4 @@
+import type { ISeller } from './ISeller'
 interface IInvoiceProduct {
   id: number
   price: number
@@ -7,11 +8,14 @@ interface IInvoiceProduct {
 
 interface IInvoice {
   id?: number
+  status?: string
   items: IInvoiceProduct[]
   dueDate: string
+  payments?: Array<any>
   date: string
   client: number
-  seller: number
+  seller: Partial<ISeller>
+  total?: number
 }
 
 export type { IInvoice, IInvoiceProduct }
