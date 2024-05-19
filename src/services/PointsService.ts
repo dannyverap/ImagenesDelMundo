@@ -8,7 +8,8 @@ import {
   updateDoc,
   where,
   writeBatch,
-  runTransaction
+  runTransaction,
+  orderBy
 } from 'firebase/firestore'
 
 class PointsService {
@@ -17,7 +18,7 @@ class PointsService {
   public POINT_INCREMENT = 3
 
   onPointsSnapshot(callback: (points: IPoint[]) => void) {
-    const pointsCollectionQuery = query(this.pointsCollectionRef)
+    const pointsCollectionQuery = query(this.pointsCollectionRef, orderBy('points', 'desc'))
     return onSnapshot(pointsCollectionQuery, (querySnapshot) => {
       const pointsData: IPoint[] = querySnapshot.docs.map(
         (doc) =>
