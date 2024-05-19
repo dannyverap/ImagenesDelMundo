@@ -7,7 +7,7 @@ export const usePointsStore = defineStore('points', () => {
   const points = ref<IPoint[]>([])
   const winner_id = ref<number | null>(null)
 
-  // Initialize real-time listener
+
   const initPointsListener = () => {
     PointsServiceInstance.onPointsSnapshot((pointsData) => {
       points.value = pointsData
@@ -67,6 +67,9 @@ export const usePointsStore = defineStore('points', () => {
       console.error('Error resetting competition:', error)
     }
   }
+  const getPointsFromSellerID = (id: number) => {
+    return points.value.find((point) => point.seller_id == id)?.points
+  }
 
   initPointsListener()
 
@@ -75,6 +78,7 @@ export const usePointsStore = defineStore('points', () => {
     winner_id,
     addSellerPoint,
     setSellerWinner,
-    resetCompetition
+    resetCompetition,
+    getPointsFromSellerID
   }
 })
