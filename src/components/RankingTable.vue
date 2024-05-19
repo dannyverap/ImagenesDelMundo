@@ -1,51 +1,106 @@
 <script setup lang="ts">
+import { PointsServiceInstance } from '@/services/PointsService';
 import { usePointsStore } from '@/stores/Points';
 import { useSellersStore } from '@/stores/Sellers';
-import { computed, onMounted } from 'vue';
+import { computed, ref, onMounted } from 'vue';
 
-const pointsStore = usePointsStore()
-const sellerStore = useSellersStore()
+const pointsStore = usePointsStore();
+const sellerStore = useSellersStore();
+
+const hoveredSellerId = ref<number | null>(null);
+const threshold = PointsServiceInstance.POINTS_THRESHOLD;
 
 onMounted(() => {
-    sellerStore.getSellers()
-})
+    sellerStore.getSellers();
+});
+
+const calculateProgressPercentage = (value: number | undefined) => {
+    if (value) {
+        const ratio = value / threshold;
+        return ratio >= 1 ? "100%" : `${ratio * 100}%`;
+    }
+    return "0%";
+};
 
 const sortedSellers = computed(() => {
     if (!sellerStore.sellers) return [];
 
     return sellerStore.sellers.slice().sort((a, b) => {
-        const pointsA = a.id && pointsStore.getPointsFromSellerID(a.id);
-        const pointsB = b.id && pointsStore.getPointsFromSellerID(b.id);
+        const pointsA = a.id ? pointsStore.getPointsFromSellerID(a.id) ?? 0 : 0;
+        const pointsB = b.id ? pointsStore.getPointsFromSellerID(b.id) ?? 0 : 0;
 
-        if (typeof pointsA !== 'undefined' && typeof pointsB !== 'undefined') {
-            return pointsB - pointsA;
-        }
-        return 0;
+        return pointsB - pointsA;
     });
 });
-</script>
 
+const getPoints = (sellerId: number | undefined): number => {
+    if (sellerId) {
+        return pointsStore.getPointsFromSellerID(sellerId) ?? 0;
+    }
+    return 0;
+};
+
+const isWinner = (sellerId: number | undefined): boolean => {
+    return pointsStore.winner_id === sellerId;
+};
+
+const pointsToWin = (points: number): number => {
+    return points >= threshold ? 0 : threshold - points;
+};
+
+const awardPrize = () => {
+    if (pointsStore.winner_id !== null) {
+        alert(`Prize awarded to seller with ID: ${pointsStore.winner_id}`);
+        // Logic to award prize (e.g., API call)
+    }
+};
+
+const resetRanking = () => {
+    pointsStore.resetCompetition();
+};
+</script>
 <template>
     <div class="bg-white shadow-md rounded-md overflow-hidden max-w-lg mx-auto mt-16">
-        <div class="bg-gray-100 py-2 px-4">
-            <h2 class="text-xl font-semibold text-gray-800">Top Sellers</h2>
+        <div class="bg-gray-200 py-2 px-4 flex justify-between items-center">
+            <h2 class="text-xl font-semibold text-[#2E3A46]">Top Sellers</h2>
+            <button @click="resetRanking"
+                class="bg-[#009688] hover:bg-[#00695c] text-white px-4 py-2 rounded-md transition duration-300">Reset
+                Ranking</button>
         </div>
-        <ul class="divide-y divide-gray-200">
-            <li v-for="(seller, idx) in sortedSellers" :key="idx" class="flex items-center py-4 px-6">
-                <span class="text-gray-700 text-lg font-medium mr-4">{{ idx + 1 }}</span>
+        <ul class="divide-y divide-gray-300">
+            <li v-for="(seller, idx) in sortedSellers" :key="idx" class="flex items-center py-4 px-6"
+                @mouseenter="hoveredSellerId = seller.id ?? null" @mouseleave="hoveredSellerId = null">
+                <span class="text-[#2E3A46] text-lg font-medium mr-4">{{ idx + 1 }}</span>
                 <img class="w-12 h-12 rounded-full object-cover mr-4"
-                    :src="'https://randomuser.me/api/portraits/women/' + (idx + 12) + '.jpg'" alt="User avatar">
+                    :src="'https://randomuser.me/api/portraits/women/' + seller.id + '.jpg'" alt="User avatar">
                 <div class="flex-1">
-                    <div class="flex items-center justify-between ">
-                        <h3 class="text-lg font-medium text-gray-800">{{ seller.name }}</h3>
-                        <i v-if="pointsStore.winner_id == seller.id" style="font-size: 1.5rem; color: gold;"
-                            class="bi bi-trophy-fill">Winner!</i>
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-lg font-medium text-[#2E3A46]">{{ seller.name }}</h3>
+                        <i v-if="isWinner(seller.id)" class="text-2xl text-[#009688] bi bi-trophy-fill">
+                            Winner!</i>
                     </div>
-                    <p class="text-gray-600 text-base">{{ seller.id && pointsStore.getPointsFromSellerID(seller.id) }}
-                        points</p>
-
+                    <div class="flex justify-between mb-1">
+                        <span class="text-base text-[#2E3A46]">{{ getPoints(seller.id) }} points</span>
+                        <span class="text-sm font-medium text-[#009688]">{{
+                            calculateProgressPercentage(getPoints(seller.id)) }}</span>
+                    </div>
+                    <div class="w-full bg-gray-300 rounded-full h-2.5 relative">
+                        <div class="bg-[#009688] h-2.5 rounded-full transition-width duration-300"
+                            :style="{ width: calculateProgressPercentage(getPoints(seller.id)) }">
+                        </div>
+                        <div v-if="hoveredSellerId === seller.id"
+                            class="absolute inset-0 flex items-center justify-center text-sm text-white bg-[#2E3A46] bg-opacity-75 rounded-md p-1">
+                            <span>{{ pointsToWin(getPoints(seller.id)) }} points to win</span>
+                        </div>
+                    </div>
                 </div>
             </li>
         </ul>
+        <div class="bg-gray-200 py-2 px-4 flex justify-center">
+            <button v-if="sortedSellers.length && isWinner(sortedSellers[0].id)" @click="awardPrize"
+                class="bg-[#009688] hover:bg-[#00695c] text-white px-4 py-2 rounded-md transition duration-300">Award
+                Prize</button>
+        </div>
     </div>
 </template>
+
