@@ -7,6 +7,7 @@ export const usePointsStore = defineStore('points', () => {
   const points = ref<IPoint[]>([])
   const winner_id = ref<number | null>(null)
   const totalPoints = ref<number>(0)
+  const prize_awarded = ref<boolean | undefined>()
 
   const initPointsListener = () => {
     PointsServiceInstance.onPointsSnapshot((pointsData) => {
@@ -15,6 +16,7 @@ export const usePointsStore = defineStore('points', () => {
       const winner = pointsData.find(
         (point) => point.points > PointsServiceInstance.POINTS_THRESHOLD
       )
+      prize_awarded.value = pointsData.find((point) => point.prize_awarded === true)?.prize_awarded
       if (winner) {
         setSellerWinner(winner.seller_id)
         getWinner()
@@ -22,6 +24,17 @@ export const usePointsStore = defineStore('points', () => {
         winner_id.value = null
       }
     })
+  }
+
+  const setPrizeAwarded = async (seller_id: number) => {
+    try {
+      const result = await PointsServiceInstance.awardPrizeToSeller(seller_id)
+      if (result !== null) {
+        prize_awarded.value = result
+      }
+    } catch (error) {
+      console.error('Error setting seller winner:', error)
+    }
   }
 
   const getWinner = async () => {
@@ -77,9 +90,11 @@ export const usePointsStore = defineStore('points', () => {
     points,
     winner_id,
     totalPoints,
+    prize_awarded,
     addSellerPoint,
     setSellerWinner,
     resetCompetition,
-    getPointsFromSellerID
+    getPointsFromSellerID,
+    setPrizeAwarded
   }
 })
