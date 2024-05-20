@@ -1,15 +1,19 @@
 import type { IInvoice, IInvoiceProduct } from '@/interfaces/IInvoice'
 
 class InvoiceCreator {
+  private static readonly DEFAULT_INVOICE_ITEM_ID = 2
+  private static readonly DEFAULT_INVOICE_ITEM_NAME = 'Search images service:'
+  private static readonly DEFAULT_INVOICE_ITEM_PRICE = 1
+
   formatDate(date: Date): string {
     return date.toISOString().slice(0, 10)
   }
 
   createInvoiceItem(quantity: number): IInvoiceProduct {
     return {
-      id: 2,
-      name: 'Search images service:',
-      price: 1,
+      id: InvoiceCreator.DEFAULT_INVOICE_ITEM_ID,
+      name: InvoiceCreator.DEFAULT_INVOICE_ITEM_NAME,
+      price: InvoiceCreator.DEFAULT_INVOICE_ITEM_PRICE,
       quantity
     }
   }
