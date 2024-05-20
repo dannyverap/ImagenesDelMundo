@@ -1,6 +1,6 @@
 <script lang="ts" setup></script>
 <template>
-    <nav class="bg-[#154759] text-white py-2 flex items-center justify-between px-6 shadow-md">
+    <nav class="bg-textPrimary text-white py-2 flex items-center justify-between px-6 shadow-md">
         <div class="logo text-lg font-semibold text-white">
             <a href="#" class="flex items-center space-x-3">
                 <img src="https://www.appdegestion.com/app/54_alegra/logo/54_alegra.png" class="h-5"

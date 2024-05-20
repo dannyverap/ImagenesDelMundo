@@ -21,17 +21,19 @@ const pickFavorite = async (id: number) => {
 
 </script>
 <template>
-    <div class="max-w-sm bg-white border border-[#b1bec6] rounded-lg shadow-lg">
-        <img class="rounded-t-lg h-40 sm:h-48 w-full object-cover" :src="image && image.link" :alt="image?.title" />
-        <div class="p-5">
-            <p class="mb-3 font-normal text-gray-700">by: {{ seller?.name }}</p>
-            <div class="flex justify-end">
+    <div
+        class="transition duration-300 transform hover:-translate-y-1 max-w-md bg-background border border-gray-400 rounded-lg shadow-lg relative overflow-hidden flex flex-col">
+        <img class="h-full w-full object-cover" :src="image && image.link" :alt="image?.title" />
+        <div class="absolute bottom-0 left-0 right-0 p-3 flex flex-col">
+            <div class="flex justify-end mt-auto">
                 <button @click="seller?.id !== undefined && pickFavorite(seller.id)"
-                    class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-[#00AF54] rounded-lg hover:bg-[#0d4957] focus:ring-4 focus:outline-none focus:ring-[#0d4957]">
-                    Vote as favorite
+                    class="inline-flex items-center px-3 py-2 text-xs font-semibold text-center text-textSecondary bg-primaryDark rounded-lg transition duration-300 transform hover:scale-105 hover:bg-hoverPrimary hover:text-primaryDark"
+                    title="Mark as Favorite">
+                    <i class="bi bi-star-fill"></i>
                 </button>
             </div>
+            <p class="bg-gray-700 mt-1 bg-opacity-50 rounded-lg text-sm font-semibold text-textSecondary p-1">by: {{
+                seller?.name }}</p>
         </div>
     </div>
 </template>
-
