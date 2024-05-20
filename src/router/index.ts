@@ -1,9 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import ImagesView from '../views/ImagesView.vue'
-import BillingView from '@/views/BillingView.vue'
 import RankingView from '@/views/RankingView.vue'
 import RewardSummaryView from '@/views/RewardSummaryView.vue'
+import LoginView from '@/views/LoginView.vue'
+import SignupView from '@/views/SignupView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -17,20 +18,28 @@ const router = createRouter({
       }
     },
     {
+      path: '/login',
+      name: 'login',
+      component: LoginView,
+      meta: {
+        requireAuth: false
+      }
+    },
+    {
+      path: '/signup',
+      name: 'signup',
+      component: SignupView,
+      meta: {
+        requireAuth: false
+      }
+    },
+    {
       path: '/search/:query',
       name: 'searchResults',
       component: ImagesView,
       props: (route) => ({
         query: route.params.query
       }),
-      meta: {
-        requireAuth: false
-      }
-    },
-    {
-      path: '/billing',
-      name: 'billing',
-      component: BillingView,
       meta: {
         requireAuth: false
       }
