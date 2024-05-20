@@ -20,7 +20,7 @@ const toggle = () => {
         <div class="flex items-center">
             <div class="logo text-2xl font-bold">
                 <a href="https://www.alegra.com/" class="flex items-center space-x-3">
-                    <img src="https://www.appdegestion.com/app/54_alegra/logo/54_alegra.png" class="h-8"
+                    <img src="/src/assets/alegra.png" class="h-8"
                         alt="Alegra Logo" />
                     <span class="self-center">Imagenes del mundo</span>
                 </a>
