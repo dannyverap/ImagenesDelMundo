@@ -39,7 +39,10 @@ class PointsService {
 
   async addSellerPoint(seller_id: number): Promise<number | null> {
     return runTransaction(db, async (transaction) => {
-      const pointsCollectionQuery = query(this.pointsCollectionRef, where('seller_id', '==', seller_id))
+      const pointsCollectionQuery = query(
+        this.pointsCollectionRef,
+        where('seller_id', '==', seller_id)
+      )
       const querySnapshot = await getDocs(pointsCollectionQuery)
 
       if (!querySnapshot.empty) {
@@ -60,7 +63,10 @@ class PointsService {
   }
 
   async setSellerWinner(seller_id: number): Promise<number | null> {
-    const pointsCollectionQuery = query(this.pointsCollectionRef, where('seller_id', '==', seller_id))
+    const pointsCollectionQuery = query(
+      this.pointsCollectionRef,
+      where('seller_id', '==', seller_id)
+    )
     const querySnapshot = await getDocs(pointsCollectionQuery)
     if (!querySnapshot.empty) {
       const doc = querySnapshot.docs[0]
@@ -72,12 +78,25 @@ class PointsService {
     }
     return null
   }
+  async awardPrizeToSeller(seller_id: number): Promise<boolean | null> {
+    const pointsCollectionQuery = query(
+      this.pointsCollectionRef,
+      where('seller_id', '==', seller_id)
+    )
+    const querySnapshot = await getDocs(pointsCollectionQuery)
+    if (!querySnapshot.empty) {
+      const doc = querySnapshot.docs[0]
+      await updateDoc(doc.ref, { prize_awarded: true })
+      return true
+    }
+    throw new Error()
+  }
 
   async resetCompetition(): Promise<void> {
     const querySnapshot = await getDocs(this.pointsCollectionRef)
     const batch = writeBatch(db)
     querySnapshot.forEach((doc) => {
-      batch.update(doc.ref, { points: 0, winner: false })
+      batch.update(doc.ref, { points: 0, winner: false, prize_awarded: false })
     })
     await batch.commit()
   }
