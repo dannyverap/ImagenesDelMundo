@@ -16,7 +16,7 @@ const authUser = async () => {
         const response = await store.login(email.value, password.value);
         if (response) {
             toast.success("Welcome")
-            router.push({ name: "dashboard" });
+            router.push({ name: "home" });
         } else {
             toast.error("Login failed")
             errorMessage.value = "Login failed";
