@@ -1,16 +1,27 @@
 <script setup lang="ts">
+import { ref } from 'vue';
+import ConfirmModal from '@/components/ConfirmModal.vue';
 import { PointsServiceInstance } from '@/services/PointsService';
 import { usePointsStore } from '@/stores/Points';
 import { useSellersStore } from '@/stores/Sellers';
-import { computed, ref, onMounted } from 'vue';
+import { computed, onMounted } from 'vue';
 import SkeletonRankingTable from './skeletons/SkeletonRankingTable.vue';
+import { useInvoicesStore } from '@/stores/Invoices';
+import type { IInvoice } from '@/interfaces/IInvoice';
+import { InvoiceCreatorInstance } from '@/utils/CreateInvoiceHelper';
+import { useToast } from 'vue-toastification';
 
 const pointsStore = usePointsStore();
 const sellerStore = useSellersStore();
+const invoices = useInvoicesStore();
 
 const isLoading = ref(true);
 const hoveredSellerId = ref<number | null>(null);
 const threshold = PointsServiceInstance.POINTS_THRESHOLD;
+const isAwardingPrize = ref(false);
+const showModal = ref(false);
+const showResetModal = ref(false);
+const toast = useToast();
 
 onMounted(async () => {
   await sellerStore.getSellers();
@@ -52,14 +63,58 @@ const pointsToWin = (points: number): number => {
 };
 
 const awardPrize = () => {
-  if (pointsStore.winner_id !== null) {
-    alert(`Prize awarded to seller with ID: ${pointsStore.winner_id}`);
-    // Logic to award prize (e.g., API call)
+  showModal.value = true;
+};
+
+const handleConfirm = async () => {
+  isAwardingPrize.value = true;
+  showModal.value = false;
+  await generateInvoice();
+  isAwardingPrize.value = false;
+};
+
+const handleCancel = () => {
+  showModal.value = false;
+  toast.info("Award prize canceled");
+};
+
+const getDefauldata = () => {
+  if (pointsStore.winner_id) {
+    return InvoiceCreatorInstance.createDefaultInvoice(pointsStore.winner_id, pointsStore.totalPoints);
+  }
+  return undefined;
+};
+
+const generateInvoice = async () => {
+  try {
+    if (pointsStore.winner_id && !pointsStore.prize_awarded) {
+      let invoiceData: IInvoice = getDefauldata()!;
+      const success = await invoices.createInvoice(invoiceData);
+      if (success) {
+        pointsStore.setPrizeAwarded(pointsStore.winner_id);
+        toast.success('Invoice successfully created');
+      } else {
+        toast.error('Error creating the invoice');
+      }
+    }
+  } catch (error) {
+    toast.error('An unexpected error occurred');
   }
 };
 
-const resetRanking = () => {
+const confirmResetRanking = () => {
+  showResetModal.value = true;
+};
+
+const handleResetConfirm = () => {
   pointsStore.resetCompetition();
+  showResetModal.value = false;
+  toast.success('Ranking has been reset');
+};
+
+const handleResetCancel = () => {
+  showResetModal.value = false;
+  toast.info("Reset ranking canceled");
 };
 </script>
 
@@ -67,7 +122,7 @@ const resetRanking = () => {
   <div class="bg-background shadow-md rounded-md overflow-hidden max-w-lg mx-auto mt-16">
     <div class="bg-lightGray py-2 px-4 flex justify-between items-center">
       <h2 class="text-xl font-semibold text-darkBlue">Top Sellers</h2>
-      <button @click="resetRanking"
+      <button @click="confirmResetRanking"
         class="bg-primary hover:bg-primaryDark text-white px-4 py-2 rounded-md transition duration-300">Reset
         Ranking</button>
     </div>
@@ -105,13 +160,31 @@ const resetRanking = () => {
       </template>
     </TransitionGroup>
 
-    <div class="bg-lightGray py-2 px-4 flex justify-center ">
-      <button v-if="sortedSellers.length && isWinner(sortedSellers[0].id)" @click="awardPrize"
-        class="bg-primary hover:bg-primaryDark text-white px-4 py-2 rounded-md transition duration-300">Award
-        Prize</button>
+    <div class="bg-lightGray py-2 px-4 flex justify-center">
+      <div v-if="!pointsStore.winner_id" class="text-center text-darkBlue font-semibold">No Winner Yet</div>
+      <button v-else-if="!pointsStore.prize_awarded" @click="awardPrize" :disabled="isAwardingPrize"
+        class="bg-primary hover:bg-primaryDark text-white px-4 py-2 rounded-md transition duration-300 shadow-md flex items-center justify-center">
+        <span v-if="!isAwardingPrize">Award Prize</span>
+        <svg v-else class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
+          viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor"
+            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+          </path>
+        </svg>
+      </button>
+      <div v-else class="text-center text-primary font-semibold">Prize Awarded</div>
     </div>
   </div>
+
+  <ConfirmModal v-if="showModal" title="Confirm Award" message="Are you sure you want to award this prize?"
+    :isVisible="showModal" @confirm="handleConfirm" @cancel="handleCancel" />
+
+  <ConfirmModal v-if="showResetModal" title="Confirm Reset" message="Are you sure you want to reset the ranking?"
+    :isVisible="showResetModal" type="danger" @confirm="handleResetConfirm" @cancel="handleResetCancel" />
 </template>
+
+
 
 <style>
 .list-enter-active,
