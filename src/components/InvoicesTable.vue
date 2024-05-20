@@ -2,7 +2,6 @@
 import { useInvoicesStore } from '@/stores/Invoices';
 import { useSellersStore } from '@/stores/Sellers';
 import { ref, computed, onMounted } from 'vue';
-import SkeletonInvoiceTable from './skeletons/SkeletonInvoiceTable.vue';
 
 const sellerStore = useSellersStore();
 const invoiceStore = useInvoicesStore();
@@ -44,7 +43,23 @@ const sortedInvoices = computed(() => {
             </thead>
             <transition-group name="table-row" tag="tbody">
                 <template v-if="isLoading">
-                    <SkeletonInvoiceTable />
+                    <tr v-for="n in 5" :key="n" class="animate-pulse">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="h-4 bg-gray-200 rounded"></div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="h-4 bg-gray-200 rounded"></div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="h-4 bg-gray-200 rounded"></div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="h-4 bg-gray-200 rounded"></div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="h-4 bg-gray-200 rounded"></div>
+                        </td>
+                    </tr>
                 </template>
                 <template v-else>
                     <tr v-for="(invoice, idx) in sortedInvoices" :key="invoice.id"

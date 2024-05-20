@@ -2,9 +2,11 @@
 </script>
 <template>
   <div class="w-full h-screen">
-    <Transition name="fade">
-      <RouterView />
-    </Transition>
+    <router-view v-slot="{ Component }">
+      <transition name="fade">
+        <component :is="Component" />
+      </transition>
+    </router-view>
   </div>
 </template>
 
