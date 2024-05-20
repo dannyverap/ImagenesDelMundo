@@ -1,23 +1,40 @@
 <script setup lang="ts">
+import { ref } from 'vue';
 import type { ImageItem } from '@/interfaces/IImage';
 import type { ISeller } from '@/interfaces/ISeller';
 import router from '@/router';
 import { usePointsStore } from '@/stores/Points';
+import ConfirmModal from '@/components/ConfirmModal.vue';
+import { useToast } from 'vue-toastification';
 
 const pointStore = usePointsStore();
+const toast = useToast();
 
 defineProps({
     image: Object as () => ImageItem,
     seller: Object as () => Partial<ISeller>
 });
 
-const pickFavorite = async (id: number) => {
-    const confirmation = window.confirm('Are you sure you want to vote for this image as your favorite?');
-    if (confirmation) {
-        await pointStore.addSellerPoint(id)
+const showModal = ref(false);
+const selectedSellerId = ref<number | null>(null);
+
+const pickFavorite = (id: number) => {
+    selectedSellerId.value = id;
+    showModal.value = true;
+};
+
+const handleConfirm = async () => {
+    if (selectedSellerId.value !== null) {
+        await pointStore.addSellerPoint(selectedSellerId.value);
+        toast.success("Thanks for your vote")
         router.push(`/`);
+        showModal.value = false;
     }
-}
+};
+
+const handleCancel = () => {
+    showModal.value = false;
+};
 
 </script>
 <template>
@@ -36,4 +53,8 @@ const pickFavorite = async (id: number) => {
                 seller?.name }}</p>
         </div>
     </div>
+
+    <ConfirmModal v-if="showModal" title="Confirm Favorite"
+        message="Are you sure you want to vote for this image as your favorite?" :isVisible="showModal"
+        @confirm="handleConfirm" @cancel="handleCancel" />
 </template>
