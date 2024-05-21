@@ -4,29 +4,40 @@ class InvoiceCreator {
   private static readonly DEFAULT_INVOICE_ITEM_ID = 2
   private static readonly DEFAULT_INVOICE_ITEM_NAME = 'Search images service:'
   private static readonly DEFAULT_INVOICE_ITEM_PRICE = 1
+  private static readonly DEFAULT_INVOICE_CLIENT_ID = 3
 
   formatDate(date: Date): string {
     return date.toISOString().slice(0, 10)
   }
 
-  createInvoiceItem(quantity: number): IInvoiceProduct {
+  createInvoiceItem(
+    quantity: number,
+    itemId: number = InvoiceCreator.DEFAULT_INVOICE_ITEM_ID,
+    itemName: string = InvoiceCreator.DEFAULT_INVOICE_ITEM_NAME,
+    itemPrice: number = InvoiceCreator.DEFAULT_INVOICE_ITEM_PRICE
+  ): IInvoiceProduct {
     return {
-      id: InvoiceCreator.DEFAULT_INVOICE_ITEM_ID,
-      name: InvoiceCreator.DEFAULT_INVOICE_ITEM_NAME,
-      price: InvoiceCreator.DEFAULT_INVOICE_ITEM_PRICE,
+      id: itemId,
+      name: itemName,
+      price: itemPrice,
       quantity
     }
   }
 
-  createDefaultInvoice(sellerId: number, points: number): IInvoice {
+  createDefaultInvoice(
+    sellerId: number,
+    points: number,
+    clientId: number = InvoiceCreator.DEFAULT_INVOICE_CLIENT_ID
+  ): IInvoice {
+    const currentDate = new Date()
     const items = [this.createInvoiceItem(points)]
+    const formattedDate = this.formatDate(currentDate)
     return {
+      client: clientId,
       status: 'open',
-      payments: [{ date: this.formatDate(new Date()) }],
       items,
-      dueDate: this.formatDate(new Date()),
-      date: this.formatDate(new Date()),
-      client: 3,
+      dueDate: formattedDate,
+      date: formattedDate,
       seller: { id: sellerId }
     }
   }
