@@ -21,7 +21,7 @@ const getPDFandOpenIt = async (id: number) => {
     const link = await InvoiceServiceInstance.getInvoicePDF(id)
     if (link.pdf) {
       window.open(link.pdf, '_blank')
-      toast.info('PDF generated')
+      toast.success('PDF generated')
     } else {
       toast.info('PDF link is not available')
     }
@@ -76,22 +76,16 @@ const sortedInvoices = computed(() => {
           </tr>
         </template>
         <template v-else>
-          <tr
-            v-for="(invoice, idx) in sortedInvoices"
-            :key="invoice.id"
-            :class="[idx % 2 === 0 ? 'bg-gray-100' : 'bg-white']"
-          >
+          <tr v-for="(invoice, idx) in sortedInvoices" :key="invoice.id"
+            :class="[idx % 2 === 0 ? 'bg-gray-100' : 'bg-white']">
             <th scope="row" class="px-3 py-4 font-medium text-textPrimary whitespace-nowrap">
               {{ invoice.date }}
             </th>
             <td class="px-3 py-4 text-textPrimary w-48">{{ invoice.seller.name }}</td>
             <td class="px-6 py-4 text-textPrimary text-center">{{ invoice.seller.id }}</td>
             <td class="px-6 py-4 text-textPrimary text-center">
-              <a
-                href="#"
-                @click.prevent="invoice.id && getPDFandOpenIt(invoice.id)"
-                class="text-blue-500 hover:text-blue-700 no-underline"
-              >
+              <a href="#" @click.prevent="invoice.id && getPDFandOpenIt(invoice.id)"
+                class="text-blue-500 hover:text-blue-700 no-underline">
                 {{ invoice.id }}
               </a>
             </td>
