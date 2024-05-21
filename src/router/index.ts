@@ -87,7 +87,7 @@ router.beforeEach(async (to, from, next) => {
     try {
       const isValidToken = await auth.validateToken()
       if (!isValidToken) {
-        toast.error('Token invalido')
+        toast.error('Invalid token')
         next({ name: 'login' })
       }
       next()

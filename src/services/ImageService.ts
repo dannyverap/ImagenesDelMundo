@@ -16,7 +16,7 @@ class ImageSearchService {
     return `${this.baseUrl}?cx=${this.searchEngineId}&key=${this.apiKey}&num=${resultsNumber}&q=${query}&searchType=image`
   }
 
-  public async searchImages(query: string, resultsNumber: number = 5): Promise<ImageItem[]> {
+  public async searchImages(query: string, resultsNumber: number): Promise<ImageItem[]> {
     const url = this.generateImageSearchUrl(query, resultsNumber)
     const options: AxiosRequestConfig = {
       method: 'GET',
