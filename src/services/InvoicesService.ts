@@ -63,6 +63,10 @@ class InvoiceService {
   async getInvoices(): Promise<any[]> {
     return this.processRequest('GET', `${this.url}`)
   }
+
+  async getInvoicePDF(id: number): Promise<IInvoice> {
+    return this.processRequest('GET', `${this.url}/${id}?fields=pdf`)
+  }
 }
 
 export const InvoiceServiceInstance = new InvoiceService()
