@@ -19,7 +19,6 @@ export const useAuthStore = defineStore(
           throw new Error(response.message)
         }
       } catch (error) {
-        console.error(error)
         return false
       }
     }
@@ -34,7 +33,6 @@ export const useAuthStore = defineStore(
           throw new Error(response.message)
         }
       } catch (error) {
-        console.error(error)
         return false
       }
     }
@@ -52,7 +50,6 @@ export const useAuthStore = defineStore(
           throw new Error(response.message)
         }
       } catch (error) {
-        console.error(error)
         return false
       }
     }

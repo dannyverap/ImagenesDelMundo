@@ -7,7 +7,7 @@ const props = defineProps({
     isVisible: Boolean,
     type: {
         type: String,
-        default: 'default', // default, danger, etc.
+        default: 'default',
     },
 });
 

@@ -75,7 +75,7 @@ export const usePointsStore = defineStore('points', () => {
   const resetCompetition = async () => {
     try {
       await PointsServiceInstance.resetCompetition()
-      winner_id.value = null // Reset winner_id
+      winner_id.value = null
     } catch (error) {
       console.error('Error resetting competition:', error)
     }
