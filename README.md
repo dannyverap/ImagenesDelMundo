@@ -22,6 +22,20 @@ Mayor información sobre la aplicación en [Imágenes Del Mundo](https://whimsic
 - Backend: Firebase Database
 - Estilos: Tailwind CSS
 
+## Features:
+
+- **Real time database:**
+  <video src="https://github.com/dannyverap/ImagenesDelMundo/assets/23703724/f16a704b-7a0a-4ca5-9a50-117befa3b3b3" controls></video>
+
+- **Award system:**
+  <video src="https://github.com/dannyverap/ImagenesDelMundo/assets/23703724/da9f6cd1-13f0-44c1-91ea-284b80a9f2e8" controls></video>
+
+- **Route Protection:**
+  <video src="https://github.com/dannyverap/ImagenesDelMundo/assets/23703724/1dd6701c-174a-47e0-a419-dc2f73663aa0" controls></video>
+
+- **Download documents:**
+  <video src="https://github.com/dannyverap/ImagenesDelMundo/assets/23703724/f6982fe2-8c1a-45b9-80a0-23144fdffbdf" controls></video>
+
 ## Configuración de Variables de Entorno 📝
 
 Para configurar correctamente tu entorno de desarrollo, debes crear un archivo `.env` en el directorio raíz de tu proyecto. Este archivo contendrá las variables de entorno necesarias para conectar tu aplicación con los servicios externos utilizados.
