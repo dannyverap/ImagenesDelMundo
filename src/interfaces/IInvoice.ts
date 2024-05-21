@@ -16,6 +16,7 @@ interface IInvoice {
   client: number
   seller: Partial<ISeller>
   total?: number
+  pdf?: string
 }
 
 export type { IInvoice, IInvoiceProduct }
