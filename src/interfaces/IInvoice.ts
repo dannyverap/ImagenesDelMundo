@@ -8,7 +8,7 @@ interface IInvoiceProduct {
 
 interface IInvoice {
   id?: number
-  status?: string
+  status: string
   items: IInvoiceProduct[]
   dueDate: string
   payments?: Array<any>

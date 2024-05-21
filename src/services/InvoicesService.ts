@@ -40,13 +40,21 @@ class InvoiceService {
     }
   }
 
-  async generateInvoice(data: IInvoice): Promise<IInvoice> {
+  async generateInvoice({
+    status,
+    items,
+    dueDate,
+    date,
+    seller,
+    client
+  }: IInvoice): Promise<IInvoice> {
     const invoiceData: IInvoice = {
-      client: 3,
-      items: data.items,
-      dueDate: data.dueDate,
-      date: data.date,
-      seller: data.seller
+      client,
+      status,
+      items,
+      dueDate,
+      date,
+      seller
     }
 
     return this.processRequest('POST', `${this.url}`, invoiceData)
