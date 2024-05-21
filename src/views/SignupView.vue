@@ -1,24 +1,28 @@
 <script setup lang="ts">
-import { type Ref, ref } from 'vue';
+import { ref } from 'vue';
 import { useAuthStore } from '@/stores/Auth';
 import router from '@/router';
 import AppLogo from '@/components/AppLogo.vue';
 import { useToast } from 'vue-toastification';
+import LoadingButton from '@/components/LoadingButton.vue';
 
-const toast = useToast()
+const toast = useToast();
 const store = useAuthStore();
-const email: Ref = ref("");
-const password: Ref = ref("");
-const phone: Ref = ref("");
-let errorMessage: Ref = ref("");
+const email = ref("");
+const password = ref("");
+const phone = ref("");
+let errorMessage = ref("");
+let isLoading = ref(false);
 
 const registerUser = async () => {
+    isLoading.value = true;
     const response = await store.signup(phone.value, email.value, password.value);
+    isLoading.value = false;
     if (response) {
-        toast.success("Welcome!")
+        toast.success("Welcome!");
         router.push({ name: "home" });
     } else {
-        toast.error("Sign up failed")
+        toast.error("Sign up failed");
         errorMessage.value = "Sign up failed";
     }
 };
@@ -54,9 +58,8 @@ const clearErrorMessage = () => {
                         class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
                 </div>
                 <div class="mb-6 text-center">
-                    <button @click.prevent="registerUser" type="submit"
-                        class="w-full py-2 bg-primary text-white rounded-lg hover:bg-primaryDark transition duration-300">Sign
-                        up</button>
+                    <LoadingButton :isLoading="isLoading" text="Sign up" @click="registerUser"
+                        :disabled="!email || !password || !phone" />
                 </div>
             </form>
         </div>

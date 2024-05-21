@@ -4,21 +4,24 @@ import { useAuthStore } from '@/stores/Auth';
 import router from '@/router';
 import AppLogo from '@/components/AppLogo.vue';
 import { useToast } from 'vue-toastification';
-
+import LoadingButton from "@/components/LoadingButton.vue"
 const toast = useToast()
 const store = useAuthStore();
 const email: Ref = ref("");
 const password: Ref = ref("");
 let errorMessage: Ref = ref("");
+let isLoading: Ref = ref(false)
 
 const authUser = async () => {
     try {
+        isLoading.value = true
         const response = await store.login(email.value, password.value);
+        isLoading.value = false
         if (response) {
-            toast.success("Welcome")
+            toast.success("Welcome back")
             router.push({ name: "home" });
         } else {
-            toast.error("Login failed")
+            toast.error("Email or password incorrect")
             errorMessage.value = "Login failed";
         }
     } catch (error: any) {
@@ -55,9 +58,10 @@ const clearErrorMessage = () => {
                         class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
                 </div>
                 <div class="mb-6 text-center">
-                    <button @click.prevent="authUser" type="submit"
-                        class="w-full py-2 bg-primary text-white rounded-lg hover:bg-primaryDark transition duration-300">Sign
-                        in</button>
+                    <div class="mb-6 text-center">
+                        <LoadingButton :isLoading="isLoading" text="Login" @click="authUser"
+                            :disabled="!email || !password" />
+                    </div>
                     <a href="javascript:void(0)" class="text-primary mt-2 inline-block hover:text-hoverPrimary">Forgot
                         password?</a>
                 </div>

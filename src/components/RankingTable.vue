@@ -10,12 +10,14 @@ import { useInvoicesStore } from '@/stores/Invoices';
 import type { IInvoice } from '@/interfaces/IInvoice';
 import { InvoiceCreatorInstance } from '@/utils/CreateInvoiceHelper';
 import { useToast } from 'vue-toastification';
+import LoadingButton from "@/components/LoadingButton.vue";
 
 const pointsStore = usePointsStore();
 const sellerStore = useSellersStore();
 const invoices = useInvoicesStore();
 
 const isLoading = ref(true);
+const buttonClicked = ref(false);
 const hoveredSellerId = ref<number | null>(null);
 const threshold = PointsServiceInstance.POINTS_THRESHOLD;
 const isAwardingPrize = ref(false);
@@ -107,7 +109,9 @@ const confirmResetRanking = () => {
 };
 
 const handleResetConfirm = () => {
+  buttonClicked.value = true
   pointsStore.resetCompetition();
+  buttonClicked.value = false
   showResetModal.value = false;
   toast.success('Ranking has been reset');
 };
@@ -122,9 +126,10 @@ const handleResetCancel = () => {
   <div class="bg-background shadow-md rounded-md overflow-hidden max-w-lg mx-auto mt-16">
     <div class="bg-lightGray py-2 px-4 flex justify-between items-center">
       <h2 class="text-xl font-semibold text-darkBlue">Top Sellers</h2>
-      <button @click="confirmResetRanking"
-        class="bg-primary hover:bg-primaryDark text-white px-4 py-2 rounded-md transition duration-300">Reset
-        Ranking</button>
+      <div class="p-2">
+        <LoadingButton :isLoading="buttonClicked" text="Resest Ranking" @click="confirmResetRanking" />
+      </div>
+
     </div>
 
     <TransitionGroup class="divide-y divide-gray-300 bg-white" name="list" tag="ul">
@@ -162,17 +167,10 @@ const handleResetCancel = () => {
 
     <div class="bg-lightGray py-2 px-4 flex justify-center">
       <div v-if="!pointsStore.winner_id" class="text-center text-darkBlue font-semibold">No Winner Yet</div>
-      <button v-else-if="!pointsStore.prize_awarded" @click="awardPrize" :disabled="isAwardingPrize"
-        class="bg-primary hover:bg-primaryDark text-white px-4 py-2 rounded-md transition duration-300 shadow-md flex items-center justify-center">
-        <span v-if="!isAwardingPrize">Award Prize</span>
-        <svg v-else class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
-          viewBox="0 0 24 24">
-          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-          <path class="opacity-75" fill="currentColor"
-            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-          </path>
-        </svg>
-      </button>
+      <div v-else-if="!pointsStore.prize_awarded">
+        <LoadingButton :isLoading="isAwardingPrize" text="Award Prize" @click="awardPrize" />
+      </div>
+
       <div v-else class="text-center text-primary font-semibold">Prize Awarded</div>
     </div>
   </div>
