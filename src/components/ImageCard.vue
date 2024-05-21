@@ -4,7 +4,7 @@ import type { ImageItem } from '@/interfaces/IImage';
 import type { ISeller } from '@/interfaces/ISeller';
 import router from '@/router';
 import { usePointsStore } from '@/stores/Points';
-import ConfirmModal from '@/components/ConfirmModal.vue';
+import ConfirmModal from '@/components/UI/ConfirmModal.vue';
 import { useToast } from 'vue-toastification';
 
 const pointStore = usePointsStore();

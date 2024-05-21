@@ -2,9 +2,9 @@
 import { type Ref, ref } from 'vue';
 import { useAuthStore } from '@/stores/Auth';
 import router from '@/router';
-import AppLogo from '@/components/AppLogo.vue';
+import AppLogo from '@/components/UI/AppLogo.vue';
 import { useToast } from 'vue-toastification';
-import LoadingButton from "@/components/LoadingButton.vue"
+import LoadingButton from "@/components/UI/LoadingButton.vue"
 const toast = useToast()
 const store = useAuthStore();
 const email: Ref = ref("");

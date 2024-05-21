@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { defineProps, computed } from 'vue';
-import SpiningAnimation from "@/components/SpiningAnimation.vue";
+import SpiningAnimation from "@/components/UI/SpiningAnimation.vue";
 
 const props = defineProps<{
     isLoading: boolean;

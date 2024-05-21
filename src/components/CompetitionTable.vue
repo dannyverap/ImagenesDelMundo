@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import ConfirmModal from '@/components/ConfirmModal.vue';
+import ConfirmModal from '@/components/UI/ConfirmModal.vue';
 import { PointsServiceInstance } from '@/services/PointsService';
 import { usePointsStore } from '@/stores/Points';
 import { useSellersStore } from '@/stores/Sellers';
@@ -10,7 +10,7 @@ import { useInvoicesStore } from '@/stores/Invoices';
 import type { IInvoice } from '@/interfaces/IInvoice';
 import { InvoiceCreatorInstance } from '@/utils/CreateInvoiceHelper';
 import { useToast } from 'vue-toastification';
-import LoadingButton from "@/components/LoadingButton.vue";
+import LoadingButton from "@/components/UI/LoadingButton.vue";
 
 const pointsStore = usePointsStore();
 const sellerStore = useSellersStore();
