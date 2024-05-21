@@ -3,7 +3,7 @@ interface IPoint {
   seller_id: number
   points: number
   winner: boolean
-  prize_awarded: boolean; 
+  prize_awarded: boolean
 }
 
 export type { IPoint }

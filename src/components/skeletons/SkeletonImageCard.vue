@@ -1,9 +1,9 @@
-<script setup lang="ts">
-</script>
+<script setup lang="ts"></script>
 
 <template>
   <div
-    class="transition duration-300 transform hover:-translate-y-1 max-w-md bg-background border border-gray-100 rounded-lg shadow-lg relative overflow-hidden flex flex-col animate-pulse">
+    class="transition duration-300 transform hover:-translate-y-1 max-w-md bg-background border border-gray-100 rounded-lg shadow-lg relative overflow-hidden flex flex-col animate-pulse"
+  >
     <div class="h-64 bg-gray-200"></div>
     <div class="absolute bottom-0 left-0 right-0 p-3 flex flex-col">
       <div class="flex justify-end mt-auto">
