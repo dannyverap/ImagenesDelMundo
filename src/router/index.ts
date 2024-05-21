@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import ImagesView from '../views/ImagesView.vue'
-import RankingView from '@/views/RankingView.vue'
+import CompetitionView from '@/views/CompetitionView.vue'
 import RewardSummaryView from '@/views/RewardSummaryView.vue'
 import LoginView from '@/views/LoginView.vue'
 import SignupView from '@/views/SignupView.vue'
@@ -49,9 +49,9 @@ const router = createRouter({
       }
     },
     {
-      path: '/ranking',
-      name: 'ranking',
-      component: RankingView,
+      path: '/competition',
+      name: 'competition',
+      component: CompetitionView,
       meta: {
         requireAuth: true
       }

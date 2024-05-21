@@ -5,7 +5,7 @@ import { PointsServiceInstance } from '@/services/PointsService';
 import { usePointsStore } from '@/stores/Points';
 import { useSellersStore } from '@/stores/Sellers';
 import { computed, onMounted } from 'vue';
-import SkeletonRankingTable from './skeletons/SkeletonRankingTable.vue';
+import SkeletonCompetitionTable from './skeletons/SkeletonCompetitionTable.vue';
 import { useInvoicesStore } from '@/stores/Invoices';
 import type { IInvoice } from '@/interfaces/IInvoice';
 import { InvoiceCreatorInstance } from '@/utils/CreateInvoiceHelper';
@@ -104,7 +104,7 @@ const generateInvoice = async () => {
   }
 };
 
-const confirmResetRanking = () => {
+const confirmResetCompetition = () => {
   showResetModal.value = true;
 };
 
@@ -113,28 +113,28 @@ const handleResetConfirm = () => {
   pointsStore.resetCompetition();
   buttonClicked.value = false
   showResetModal.value = false;
-  toast.success('Ranking has been reset');
+  toast.success('Competition has been reset');
 };
 
 const handleResetCancel = () => {
   showResetModal.value = false;
-  toast.info("Reset ranking canceled");
+  toast.info("Reset competition canceled");
 };
 </script>
 
 <template>
   <div class="bg-background shadow-md rounded-md overflow-hidden max-w-lg mx-auto mt-16">
     <div class="bg-lightGray py-2 px-4 flex justify-between items-center">
-      <h2 class="text-xl font-semibold text-darkBlue">Top Sellers</h2>
+      <h2 class="text-xl font-semibold text-darkBlue">Competitors</h2>
       <div class="p-2">
-        <LoadingButton :isLoading="buttonClicked" text="Resest Ranking" @click="confirmResetRanking" />
+        <LoadingButton :isLoading="buttonClicked" text="Resest Competition" @click="confirmResetCompetition" />
       </div>
 
     </div>
 
     <TransitionGroup class="divide-y divide-gray-300 bg-white" name="list" tag="ul">
       <template v-if="isLoading">
-        <SkeletonRankingTable />
+        <SkeletonCompetitionTable />
       </template>
       <template v-else>
         <li v-for="(seller, idx) in sortedSellers" :key="seller.id" class="flex items-center py-4 px-6"
@@ -178,7 +178,7 @@ const handleResetCancel = () => {
   <ConfirmModal v-if="showModal" title="Confirm Award" message="Are you sure you want to award this prize?"
     :isVisible="showModal" @confirm="handleConfirm" @cancel="handleCancel" />
 
-  <ConfirmModal v-if="showResetModal" title="Confirm Reset" message="Are you sure you want to reset the ranking?"
+  <ConfirmModal v-if="showResetModal" title="Confirm Reset" message="Are you sure you want to reset the competition?"
     :isVisible="showResetModal" type="danger" @confirm="handleResetConfirm" @cancel="handleResetCancel" />
 </template>
 

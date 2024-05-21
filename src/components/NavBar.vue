@@ -8,7 +8,7 @@ const authStore = useAuthStore()
 
 const tags = [
     { name: 'Home', routeName: 'home' },
-    { name: 'Ranking', routeName: 'ranking' },
+    { name: 'Competition', routeName: 'competition' },
     { name: 'Reward Summary', routeName: 'rewardSummary' },
 ];
 
